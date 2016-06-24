@@ -1,0 +1,42 @@
+services:
+    # Adapters
+    darkilliant_request_interceptor_debugger.adapter.buzz_request_litener:
+        class: Darkilliant\Bundle\RequestInterceptorDebuggerBundle\Adapter\Buzz\BuzzRequestListener
+        arguments: [@event_dispatcher]
+        tags:
+            - { name: buzz.listener }
+
+    # Data collector
+    darkilliant_request_interceptor_debugger.request_interceptor_collector:
+        class: Darkilliant\Bundle\RequestInterceptorDebuggerBundle\DataCollector\RequestInterceptorCollector
+        arguments:
+            - @buzz
+            - @darkilliant_request_interceptor_debugger.definition_factory.buzz
+            - @darkilliant_request_interceptor_debugger.generator.command_generator
+        public: true
+        tags:
+            -
+                name: data_collector
+                template: 'DarkilliantRequestInterceptorDebuggerBundle:data_collector:collector.html.twig'
+                id: 'darkilliant_request_interceptor_debugger.request_interceptor_collector'
+            -
+                name: kernel.event_listener
+                event: darkilliant_request_interceptor_debugger.request_definition_intercept
+                method: onRequestDefinitionIntercepted
+
+    # Definition factory
+    darkilliant_request_interceptor_debugger.definition_factory.buzz:
+        class: Darkilliant\CurlCommandGenerator\Definition\Factory\BuzzDefinitionFactory
+
+    # Command Generator
+    darkilliant_request_interceptor_debugger.generator.command_generator:
+        class: Darkilliant\CurlCommandGenerator\Generator\CommandGenerator
+
+    # Request logger
+    darkilliant_request_interceptor_debugger.logger.request_logger:
+        class: Darkilliant\Bundle\RequestInterceptorDebuggerBundle\Logger\CurlCommandLogger
+        arguments: [@darkilliant_request_interceptor_debugger.generator.command_generator]
+        calls:
+            - [setLogger, [@logger]]
+        tags:
+            - { name: kernel.event_listener, event: darkilliant_request_interceptor_debugger.request_definition_intercept, method: onRequestDefinitionIntercepted }

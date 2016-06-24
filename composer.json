@@ -1,0 +1,28 @@
+{
+    "name": "jean-pasqualini/request-interceptor-debugger-bundle",
+    "description": "Intercepte les requete afin de debugger leur contenu",
+    "type": "bundle",
+    "autoload": {
+        "psr-4": { "Darkilliant\\Bundle\\RequestInterceptorDebuggerBundle\\": "" },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "require": {
+        "php": ">=5.5.9",
+        "symfony/symfony": "2.3.*",
+        "symfony/monolog-bundle": "^2.8",
+        "sensio/distribution-bundle": "^5.0",
+        "sensio/framework-extra-bundle": "^3.0.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.4"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jean Pasqualini",
+            "email": "jpasqualini75@gmail.com"
+        }
+    ]
+}
